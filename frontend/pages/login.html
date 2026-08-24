@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartBus AI - Login</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/background-effects.css">
+</head>
+<body class="auth-body">
+    <div class="auth-shape auth-shape-one" aria-hidden="true"></div>
+    <div class="auth-shape auth-shape-two" aria-hidden="true"></div>
+    <main class="auth-container">
+        <section class="auth-showcase" aria-label="SmartBus AI introduction">
+            <div class="auth-brand">
+                <div class="auth-brand-mark">SB</div>
+                <span>SmartBus AI</span>
+            </div>
+            <div class="auth-showcase-copy">
+                <p class="auth-kicker">Intelligent urban travel</p>
+                <h1>Welcome to SmartBus AI</h1>
+                <p>Smart and reliable bus tracking at your fingertips.</p>
+            </div>
+            <div class="auth-transit-visual" aria-hidden="true">
+                <div class="transit-glow"></div>
+                <div class="transit-route-line"><span></span><span></span><span></span></div>
+                <div class="transit-bus"><i></i><i></i><b></b></div>
+                <div class="transit-stop stop-left"></div>
+                <div class="transit-stop stop-right"></div>
+            </div>
+            <div class="auth-showcase-footer">
+                <span>LIVE NETWORK</span>
+                <strong>41 active buses</strong>
+            </div>
+        </section>
+
+        <section class="auth-form-panel">
+            <div id="message" class="message" aria-live="polite"></div>
+
+            <div id="signinView" class="auth-view is-active">
+                <p class="auth-kicker">Passenger and staff access</p>
+                <h2>Sign In</h2>
+                <p class="auth-subtitle">Continue your journey with SmartBus AI.</p>
+
+                <form id="loginForm" method="post">
+                    <div class="auth-field">
+                        <label for="username">Email or Username</label>
+                        <input type="text" id="username" name="username" autocomplete="username" required>
+                    </div>
+
+                    <div class="auth-field">
+                        <label for="password">Password</label>
+                        <div class="password-field">
+                            <input type="password" id="password" name="password" autocomplete="current-password" required>
+                            <button class="password-toggle" type="button" data-password-target="password" aria-label="Show password">Show</button>
+                        </div>
+                    </div>
+
+                    <div class="auth-options">
+                        <label class="remember-option"><input type="checkbox" name="remember"> <span>Remember me</span></label>
+                        <span class="secure-note">Secure access</span>
+                    </div>
+
+                    <button id="loginButton" class="auth-submit" type="submit">Sign In</button>
+                </form>
+
+                <p class="auth-switch">Don't have an account? <button id="showRegister" class="text-button" type="button">Create Account</button></p>
+            </div>
+
+            <div id="registerView" class="auth-view" hidden>
+                <p class="auth-kicker">Join the network</p>
+                <h2>Create Account</h2>
+                <p class="auth-subtitle">Set up your SmartBus AI passenger account.</p>
+
+                <form id="registerForm" novalidate>
+                    <div class="auth-field">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" name="fullName" autocomplete="name" required>
+                    </div>
+                    <div class="auth-field">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" autocomplete="email" required>
+                    </div>
+                    <div class="auth-field">
+                        <label for="registerUsername">Username</label>
+                        <input type="text" id="registerUsername" name="username" autocomplete="username" required>
+                    </div>
+                    <div class="auth-field">
+                        <label for="registerPassword">Password</label>
+                        <div class="password-field">
+                            <input type="password" id="registerPassword" name="password" autocomplete="new-password" minlength="8" required>
+                            <button class="password-toggle" type="button" data-password-target="registerPassword" aria-label="Show password">Show</button>
+                        </div>
+                    </div>
+                    <div class="auth-field">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <div class="password-field">
+                            <input type="password" id="confirmPassword" name="confirmPassword" autocomplete="new-password" minlength="8" required>
+                            <button class="password-toggle" type="button" data-password-target="confirmPassword" aria-label="Show password">Show</button>
+                        </div>
+                    </div>
+                    <button class="auth-submit" type="submit">Create Account</button>
+                </form>
+
+                <p class="auth-switch">Already have an account? <button id="showSignin" class="text-button" type="button">Sign In</button></p>
+            </div>
+        </section>
+    </main>
+
+    <script src="../js/script.js"></script>
+    <script src="../js/background-effects.js"></script>
+</body>
+</html>

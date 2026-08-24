@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartBus AI - Home</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/background-effects.css">
+</head>
+<body class="passenger-body">
+    <header class="passenger-topbar">
+        <div class="brand-group">
+            <div class="brand-mark">SB</div>
+            <div>
+                <p class="eyebrow">SmartBus AI</p>
+                <h1>Passenger Portal</h1>
+            </div>
+        </div>
+
+        <nav class="passenger-nav" aria-label="Main navigation">
+            <a href="/pages/home.html" aria-current="page">Home</a>
+            <a href="/pages/find-bus.html">Find Bus</a>
+            <a href="/pages/routes.html">Routes</a>
+            <a href="/pages/bus-timings.html">Bus Timings</a>
+            <a href="/pages/my-bus.html">My/Selected Bus</a>
+            <button id="logoutButton" type="button" class="logout-btn">Logout</button>
+        </nav>
+    </header>
+
+    <main class="passenger-shell home-shell">
+        <section class="welcome-panel home-welcome">
+            <div>
+                <p class="eyebrow accent">Your daily transit companion</p>
+                <h2>Welcome to SmartBus AI</h2>
+                <p>Smart and simple bus information for passengers.</p>
+            </div>
+            <a class="primary-btn home-cta" href="/pages/find-bus.html">Find a Bus</a>
+        </section>
+
+        <section class="home-section" aria-labelledby="stats-heading">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow accent">Network at a glance</p>
+                    <h2 id="stats-heading">Today's Network</h2>
+                </div>
+            </div>
+            <div class="overview-grid">
+                <article class="overview-card card-blue">
+                    <p>Active buses</p>
+                    <h3>41</h3>
+                    <span>On the network today</span>
+                </article>
+                <article class="overview-card card-green">
+                    <p>Next departure</p>
+                    <h3>08 min</h3>
+                    <span>From Mattuthavani</span>
+                </article>
+                <article class="overview-card card-amber">
+                    <p>Delayed routes</p>
+                    <h3>3</h3>
+                    <span>Weather / traffic advisory</span>
+                </article>
+            </div>
+        </section>
+
+        <section class="panel home-bus-summary" aria-labelledby="recent-bus-heading">
+            <div class="panel-header">
+                <div>
+                    <p class="eyebrow accent">Your recent selection</p>
+                    <h2 id="recent-bus-heading">Selected bus</h2>
+                </div>
+                <span class="detail-tag">On Time</span>
+            </div>
+            <div class="home-bus-details">
+                <div>
+                    <span class="bus-label">Bus Number</span>
+                    <strong>Bus 14</strong>
+                </div>
+                <div>
+                    <span class="bus-label">Route</span>
+                    <strong>Route A1</strong>
+                </div>
+                <div>
+                    <span class="bus-label">Current Status</span>
+                    <strong class="status-good home-status">On Time</strong>
+                </div>
+                <div>
+                    <span class="bus-label">Current Location</span>
+                    <strong>Near Kamaraj Road</strong>
+                </div>
+                <div>
+                    <span class="bus-label">Next Stop</span>
+                    <strong>Periyar Bus Stand</strong>
+                </div>
+            </div>
+        </section>
+
+        <section class="home-insights" aria-labelledby="insights-heading">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow accent">Stay informed</p>
+                    <h2 id="insights-heading">Your SmartBus overview</h2>
+                </div>
+            </div>
+            <div class="insight-grid">
+                <article class="insight-card insight-tracking">
+                    <div class="insight-icon">LIVE</div>
+                    <div>
+                        <h3>Live Bus Tracking</h3>
+                        <p>Follow the current movement of your selected bus and upcoming stops.</p>
+                    </div>
+                    <div class="insight-route" aria-label="Live route status">
+                        <span class="route-point active">You</span>
+                        <span class="route-line"></span>
+                        <span class="route-point">Bus 14</span>
+                        <span class="route-line"></span>
+                        <span class="route-point">Periyar</span>
+                    </div>
+                </article>
+                <article class="insight-card">
+                    <div class="insight-icon icon-blue">ROUTE</div>
+                    <div>
+                        <h3>Smart Route Information</h3>
+                        <p>Plan around active routes, stops, and the latest network conditions.</p>
+                    </div>
+                    <strong class="insight-value">A1 <span>most selected route</span></strong>
+                </article>
+                <article class="insight-card">
+                    <div class="insight-icon icon-amber">AI</div>
+                    <div>
+                        <h3>AI Traffic Prediction</h3>
+                        <p>Smart delay signals help you make better travel decisions before departure.</p>
+                    </div>
+                    <strong class="insight-value">3 <span>routes need attention</span></strong>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <script src="../js/script.js"></script>
+    <script src="../js/background-effects.js"></script>
+</body>
+</html>

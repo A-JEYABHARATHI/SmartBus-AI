@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartBus AI - Find Bus</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/background-effects.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+</head>
+<body class="passenger-body">
+    <header class="passenger-topbar">
+        <div class="brand-group">
+            <div class="brand-mark">SB</div>
+            <div>
+                <p class="eyebrow">SmartBus AI</p>
+                <h1>Passenger Portal</h1>
+            </div>
+        </div>
+
+        <nav class="passenger-nav" aria-label="Main navigation">
+            <a href="/pages/home.html">Home</a>
+            <a href="/pages/find-bus.html">Find Bus</a>
+            <a href="/pages/routes.html">Routes</a>
+            <a href="/pages/bus-timings.html">Bus Timings</a>
+            <a href="/pages/my-bus.html">My/Selected Bus</a>
+            <button id="logoutButton" type="button" class="logout-btn">Logout</button>
+        </nav>
+    </header>
+
+    <main class="passenger-shell">
+        <section class="search-panel" id="find-bus">
+            <div class="search-header">
+                <div>
+                    <p class="eyebrow accent">Plan your route</p>
+                    <h2>Find your next bus</h2>
+                </div>
+                <div class="mini-badge">Demo live route data</div>
+            </div>
+
+            <form id="busSearchForm" class="search-form">
+                <div class="field-block">
+                    <label for="fromStop">Starting location</label>
+                    <div class="location-field-control">
+                    <select id="fromStop">
+                        <option value="current-location">📍 Current Location</option>
+                        <option value="Mattuthavani">Mattuthavani</option>
+                        <option value="Central Station">Central Station</option>
+                        <option value="Periyar">Periyar</option>
+                        <option value="City Campus">City Campus</option>
+                        <option value="Ramanathapuram">Ramanathapuram</option>
+                        <option value="Airport">Airport</option>
+                    </select>
+                        <button id="useMyLocation" class="location-inline-btn" type="button">📍 Use Current Location</button>
+                    </div>
+                    <p id="locationStatus" class="location-status" role="status" aria-live="polite">Getting your live location...</p>
+                </div>
+
+                <div class="field-block">
+                    <label for="toStop">Destination</label>
+                    <select id="toStop">
+                        <option value="Periyar">Periyar</option>
+                        <option value="Central Station">Central Station</option>
+                        <option value="Mattuthavani">Mattuthavani</option>
+                        <option value="City Campus">City Campus</option>
+                        <option value="Ramanathapuram">Ramanathapuram</option>
+                        <option value="Airport">Airport</option>
+                    </select>
+                </div>
+
+                <div class="field-block">
+                    <label for="routeFilter">Route</label>
+                    <select id="routeFilter">
+                        <option value="all">All routes</option>
+                        <option value="A1">A1</option>
+                        <option value="B3">B3</option>
+                        <option value="C2">C2</option>
+                        <option value="D5">D5</option>
+                        <option value="E1">E1</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="primary-btn">Find Bus</button>
+            </form>
+        </section>
+
+        <section class="panel location-panel" aria-labelledby="location-heading">
+            <div class="panel-header">
+                <div>
+                    <p class="eyebrow accent">Real-time position</p>
+                    <h3 id="location-heading">Your location</h3>
+                </div>
+            </div>
+
+            <div class="location-coordinates" aria-label="Current coordinates">
+                <div>
+                    <span>Latitude</span>
+                    <strong id="latitudeValue">--</strong>
+                </div>
+                <div>
+                    <span>Longitude</span>
+                    <strong id="longitudeValue">--</strong>
+                </div>
+            </div>
+
+            <div id="userLocationMap" class="location-map" aria-label="Map showing your current location"></div>
+        </section>
+
+        <section class="content-grid">
+            <article class="panel" id="routes">
+                <div class="panel-header">
+                    <h3>Available Buses</h3>
+                    <button id="refreshBuses" class="secondary-btn" type="button">Refresh</button>
+                </div>
+                <div id="busList" class="bus-list"></div>
+            </article>
+
+            <aside class="panel details-panel" id="selected-bus">
+                <div class="panel-header">
+                    <h3>Selected Bus</h3>
+                    <span class="detail-tag">My route</span>
+                </div>
+                <div id="selectedBusCard" class="selected-bus-card"></div>
+            </aside>
+        </section>
+    </main>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="../js/script.js"></script>
+    <script src="../js/background-effects.js"></script>
+    <script>
+        const busData = [
+            { id: 14, busNumber: 'Bus 14', route: 'A1', from: 'Mattuthavani', to: 'Periyar', status: 'On Time', arrival: 8, distance: 2.4, occupancy: 72, currentLocation: 'Near Kamarajar Road', nextStop: 'Periyar Bus Stand', delay: 0, journeyTime: 18, hours: '05:30 - 22:00', latitude: 9.9252, longitude: 78.1198, lastUpdated: new Date().toISOString() },
+            { id: 27, busNumber: 'Bus 27', route: 'B3', from: 'Mattuthavani', to: 'Central Station', status: 'Delayed', arrival: 15, distance: 4.1, occupancy: 82, currentLocation: 'Near Anna Nagar', nextStop: 'Central Station', delay: 8, journeyTime: 24, hours: '06:00 - 21:30', latitude: 9.9340, longitude: 78.1283, lastUpdated: new Date().toISOString() },
+            { id: 9, busNumber: 'Bus 9', route: 'C2', from: 'Ramanathapuram', to: 'City Campus', status: 'On Time', arrival: 6, distance: 1.8, occupancy: 58, currentLocation: 'Near University Gate', nextStop: 'City Campus', delay: 0, journeyTime: 14, hours: '05:45 - 21:45', latitude: 9.9125, longitude: 78.1250, lastUpdated: new Date().toISOString() },
+            { id: 33, busNumber: 'Bus 33', route: 'D5', from: 'Airport', to: 'Central Station', status: 'Maintenance', arrival: 19, distance: 5.6, occupancy: 34, currentLocation: 'Service Bay', nextStop: 'Airport Terminal', delay: 0, journeyTime: 26, hours: '07:00 - 20:00', latitude: 9.8340, longitude: 78.0930, lastUpdated: new Date().toISOString() },
+            { id: 41, busNumber: 'Bus 41', route: 'E1', from: 'Periyar', to: 'Airport', status: 'On Time', arrival: 11, distance: 3.2, occupancy: 80, currentLocation: 'Near Airport Road', nextStop: 'Airport', delay: 0, journeyTime: 20, hours: '06:15 - 22:15', latitude: 9.9180, longitude: 78.1100, lastUpdated: new Date().toISOString() }
+        ];
+
+        const busList = document.getElementById('busList');
+        const selectedBusCard = document.getElementById('selectedBusCard');
+        const busSearchForm = document.getElementById('busSearchForm');
+        const fromStop = document.getElementById('fromStop');
+        const toStop = document.getElementById('toStop');
+        const routeFilter = document.getElementById('routeFilter');
+        const refreshBuses = document.getElementById('refreshBuses');
+
+        let selectedBus = null;
+
+        function statusClass(status) {
+            if (status === 'Delayed') return 'status-warning';
+            if (status === 'Maintenance') return 'status-danger';
+            return 'status-good';
+        }
+
+        function saveSelectedBus(bus) {
+            localStorage.setItem('selectedBus', JSON.stringify(bus));
+        }
+
+        function renderBusCards(items) {
+            if (!busList) return;
+
+            if (!items || items.length === 0) {
+                busList.innerHTML = '<div class="empty-state">No buses found for the selected route. Please try another combination.</div>';
+                return;
+            }
+
+            busList.innerHTML = items.map((bus) => `
+                <button type="button" class="bus-card ${selectedBus && selectedBus.id === bus.id ? 'selected' : ''}" data-bus-id="${bus.id}">
+                    <div class="bus-card-head">
+                        <div>
+                            <p class="bus-label">Bus ${bus.id}</p>
+                            <h4>Route ${bus.route}</h4>
+                        </div>
+                        <span class="status-pill ${statusClass(bus.status)}">${bus.status}</span>
+                    </div>
+                    <div class="bus-route-line">
+                        <span>${bus.from}</span>
+                        <span class="route-arrow">→</span>
+                        <span>${bus.to}</span>
+                    </div>
+                    <div class="bus-meta-grid">
+                        <div><span>Arrives in</span><strong>${bus.arrival} min</strong></div>
+                        <div><span>Distance</span><strong>${bus.distance} km</strong></div>
+                        <div><span>Occupancy</span><strong>${bus.occupancy}%</strong></div>
+                    </div>
+                </button>
+            `).join('');
+
+            busList.querySelectorAll('.bus-card').forEach((card) => {
+                card.addEventListener('click', () => {
+                    const busId = Number(card.dataset.busId);
+                    const bus = busData.find((item) => item.id === busId);
+                    if (bus) {
+                        selectedBus = bus;
+                        saveSelectedBus(bus);
+                        renderBusCards(getFilteredBuses());
+                        renderSelectedBus();
+                    }
+                });
+            });
+        }
+
+        function renderSelectedBus() {
+            if (!selectedBusCard) return;
+
+            if (!selectedBus) {
+                selectedBusCard.innerHTML = '<div class="empty-state">No bus selected. Please search for a route.</div>';
+                return;
+            }
+
+            const bus = selectedBus;
+            selectedBusCard.innerHTML = `
+                <div class="selected-bus-header">
+                    <div>
+                        <p class="bus-label">Bus ${bus.id}</p>
+                        <h4>Route ${bus.route}</h4>
+                    </div>
+                    <span class="status-pill ${statusClass(bus.status)}">${bus.status}</span>
+                </div>
+
+                <dl class="detail-list">
+                    <div><dt>Bus number</dt><dd>Bus ${bus.id}</dd></div>
+                    <div><dt>Route</dt><dd>${bus.route}</dd></div>
+                    <div><dt>Current location</dt><dd>${bus.currentLocation}</dd></div>
+                    <div><dt>Next stop</dt><dd>${bus.nextStop}</dd></div>
+                    <div><dt>Expected arrival</dt><dd>${bus.arrival} minutes</dd></div>
+                    <div><dt>Occupancy</dt><dd>${bus.occupancy}%</dd></div>
+                    <div><dt>Status</dt><dd>${bus.status}</dd></div>
+                    <div><dt>Delay</dt><dd>${bus.delay > 0 ? bus.delay + ' minutes' : 'None'}</dd></div>
+                </dl>
+            `;
+        }
+
+        function getFilteredBuses() {
+            const start = fromStop.value;
+            const end = toStop.value;
+            const route = routeFilter.value;
+
+            return busData.filter((bus) => {
+                const matchesFrom = start === 'current-location' ? true : (start ? bus.from === start : true);
+                const matchesTo = end ? bus.to === end : true;
+                const matchesRoute = route === 'all' ? true : bus.route === route;
+                return matchesFrom && matchesTo && matchesRoute;
+            });
+        }
+
+        function initializeFromQuery() {
+            const params = new URLSearchParams(window.location.search);
+            const from = params.get('from');
+            const to = params.get('to');
+            const route = params.get('route');
+
+            if (from) fromStop.value = from;
+            if (to) toStop.value = to;
+            if (route) routeFilter.value = route;
+        }
+
+        busSearchForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const filtered = getFilteredBuses();
+            if (filtered.length > 0) {
+                selectedBus = filtered[0];
+                saveSelectedBus(selectedBus);
+                renderBusCards(filtered);
+                renderSelectedBus();
+            } else {
+                selectedBus = null;
+                busList.innerHTML = '<div class="empty-state">No buses found for the selected route. Please try another combination.</div>';
+                selectedBusCard.innerHTML = '<div class="empty-state">No buses found. Please try another route.</div>';
+            }
+        });
+
+        refreshBuses.addEventListener('click', () => {
+            const filtered = getFilteredBuses();
+            selectedBus = filtered[0] || null;
+            if (selectedBus) saveSelectedBus(selectedBus);
+            renderBusCards(filtered);
+            renderSelectedBus();
+        });
+
+        initializeFromQuery();
+        const initialMatches = getFilteredBuses();
+        selectedBus = initialMatches[0] || null;
+        if (selectedBus) saveSelectedBus(selectedBus);
+        renderBusCards(initialMatches);
+        renderSelectedBus();
+    </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>SmartBus AI - Predictions</title>
+	<link rel="stylesheet" href="../css/style.css">
+	<link rel="stylesheet" href="../css/background-effects.css">
+</head>
+<body class="passenger-body">
+	<header class="passenger-topbar">
+		<div class="brand-group">
+			<div class="brand-mark">SB</div>
+			<div>
+				<p class="eyebrow">SmartBus AI</p>
+				<h1>Passenger Portal</h1>
+			</div>
+		</div>
+
+		<nav class="passenger-nav" aria-label="Main navigation">
+			<a href="/pages/home.html">Home</a>
+			<a href="/pages/find-bus.html">Find Bus</a>
+			<a href="/pages/routes.html">Routes</a>
+			<a href="/pages/bus-timings.html">Bus Timings</a>
+			<a href="/pages/my-bus.html">My/Selected Bus</a>
+			<button id="logoutButton" type="button" class="logout-btn">Logout</button>
+		</nav>
+	</header>
+
+	<main class="passenger-shell">
+		<section class="search-panel page-intro">
+			<div><p class="eyebrow accent">AI-powered travel planning</p><h2>AI Bus Predictions</h2><p>Make better departure decisions with a clear view of traffic, demand, and arrival confidence.</p></div>
+			<div class="prediction-confidence"><strong>86%</strong><span>confidence</span></div>
+		</section>
+		<section class="prediction-grid">
+			<article class="prediction-card prediction-blue"><span class="prediction-label">Predicted arrival</span><strong>08 min</strong><small>Bus 14 · Route A1</small><div class="prediction-meter"><i style="width: 82%"></i></div></article>
+			<article class="prediction-card prediction-green"><span class="prediction-label">Traffic level</span><strong>Low</strong><small>Routes are moving normally</small><div class="prediction-meter"><i style="width: 34%"></i></div></article>
+			<article class="prediction-card prediction-amber"><span class="prediction-label">Crowd prediction</span><strong>Moderate</strong><small>Best window: next 20 minutes</small><div class="prediction-meter"><i style="width: 58%"></i></div></article>
+			<article class="prediction-card prediction-red"><span class="prediction-label">Delay probability</span><strong>18%</strong><small>Weather and traffic signals combined</small><div class="prediction-meter"><i style="width: 18%"></i></div></article>
+		</section>
+		<section class="panel prediction-advice"><div><p class="eyebrow accent">Smart recommendation</p><h3>Leave around 07:52 for the smoothest journey.</h3><p>AI suggests Bus 14 from Mattuthavani for the best balance of arrival time and occupancy.</p></div><a class="primary-btn" href="/pages/find-bus.html">Find This Bus</a></section>
+	</main>
+
+	<script src="../js/script.js"></script>
+	<script src="../js/background-effects.js"></script>
+</body>
+</html>

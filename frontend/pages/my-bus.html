@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartBus AI - My Bus</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/background-effects.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+</head>
+<body class="passenger-body">
+    <header class="passenger-topbar">
+        <div class="brand-group">
+            <div class="brand-mark">SB</div>
+            <div>
+                <p class="eyebrow">SmartBus AI</p>
+                <h1>Passenger Portal</h1>
+            </div>
+        </div>
+
+        <nav class="passenger-nav" aria-label="Main navigation">
+            <a href="/pages/home.html">Home</a>
+            <a href="/pages/find-bus.html">Find Bus</a>
+            <a href="/pages/routes.html">Routes</a>
+            <a href="/pages/bus-timings.html">Bus Timings</a>
+            <a href="/pages/my-bus.html">My/Selected Bus</a>
+            <button id="logoutButton" type="button" class="logout-btn">Logout</button>
+        </nav>
+    </header>
+
+    <main class="passenger-shell">
+        <section class="search-panel">
+            <div class="search-header">
+                <div>
+                    <p class="eyebrow accent">Your trip</p>
+                    <h2>Selected bus</h2>
+                </div>
+                <div class="mini-badge">Demo selected route</div>
+            </div>
+        </section>
+
+        <section class="content-grid">
+            <article class="panel details-panel">
+                <div id="selectedBusCard" class="selected-bus-card"></div>
+            </article>
+
+            <article class="panel">
+                <div class="panel-header">
+                    <h3>Live Bus Location</h3>
+                    <div class="location-actions">
+                        <span class="detail-tag tag-light">Live</span>
+                        <button id="refreshBusLocation" class="secondary-btn" type="button">Refresh Location</button>
+                    </div>
+                </div>
+
+                <div class="bus-location-summary">
+                    <div><span>Current status</span><strong id="busLocationStatus">Connecting...</strong></div>
+                    <div><span>Latitude</span><strong id="busLatitude">--</strong></div>
+                    <div><span>Longitude</span><strong id="busLongitude">--</strong></div>
+                    <div><span>Last updated</span><strong id="busLastUpdated">--</strong></div>
+                </div>
+                <p id="busLocationMessage" class="location-status" role="status" aria-live="polite">Loading live bus location...</p>
+                <div id="selectedBusMap" class="location-map selected-bus-map" aria-label="Map showing the selected bus current location"></div>
+            </article>
+        </section>
+    </main>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="../js/script.js"></script>
+    <script src="../js/background-effects.js"></script>
+    <script>
+        const busData = [
+            { id: 14, route: 'A1', from: 'Mattuthavani', to: 'Periyar', status: 'On Time', arrival: 8, distance: 2.4, occupancy: 72, currentLocation: 'Near Kamarajar Road', nextStop: 'Periyar Bus Stand', delay: 0, journeyTime: 18, hours: '05:30 - 22:00' },
+            { id: 27, route: 'B3', from: 'Mattuthavani', to: 'Central Station', status: 'Delayed', arrival: 15, distance: 4.1, occupancy: 82, currentLocation: 'Near Anna Nagar', nextStop: 'Central Station', delay: 8, journeyTime: 24, hours: '06:00 - 21:30' },
+            { id: 9, route: 'C2', from: 'Ramanathapuram', to: 'City Campus', status: 'On Time', arrival: 6, distance: 1.8, occupancy: 58, currentLocation: 'Near University Gate', nextStop: 'City Campus', delay: 0, journeyTime: 14, hours: '05:45 - 21:45' },
+            { id: 33, route: 'D5', from: 'Airport', to: 'Central Station', status: 'Maintenance', arrival: 19, distance: 5.6, occupancy: 34, currentLocation: 'Service Bay', nextStop: 'Airport Terminal', delay: 0, journeyTime: 26, hours: '07:00 - 20:00' },
+            { id: 41, route: 'E1', from: 'Periyar', to: 'Airport', status: 'On Time', arrival: 11, distance: 3.2, occupancy: 80, currentLocation: 'Near Airport Road', nextStop: 'Airport', delay: 0, journeyTime: 20, hours: '06:15 - 22:15' }
+        ];
+
+        const selectedBusCard = document.getElementById('selectedBusCard');
+
+        function statusClass(status) {
+            if (status === 'Delayed') return 'status-warning';
+            if (status === 'Maintenance') return 'status-danger';
+            return 'status-good';
+        }
+
+        function updateMapMarker(bus) {
+            return bus;
+        }
+
+        function renderSelectedBus() {
+            const savedBus = localStorage.getItem('selectedBus') || localStorage.getItem('smartbusSelectedBus');
+            const bus = savedBus ? JSON.parse(savedBus) : null;
+
+            if (!bus) {
+                selectedBusCard.innerHTML = `
+                    <div class="empty-state">
+                        No bus selected. Please choose a route from the Find Bus page.
+                        <div style="margin-top: 12px;">
+                            <a href="/pages/find-bus.html" class="primary-btn" style="display:inline-block; text-decoration:none;">Find Bus</a>
+                        </div>
+                    </div>
+                `;
+                updateMapMarker(null);
+                return;
+            }
+
+            selectedBusCard.innerHTML = `
+                <div class="selected-bus-header">
+                    <div>
+                        <p class="bus-label">Bus ${bus.id}</p>
+                        <h4>Route ${bus.route}</h4>
+                    </div>
+                    <span class="status-pill ${statusClass(bus.status)}">${bus.status}</span>
+                </div>
+
+                <dl class="detail-list">
+                    <div><dt>Bus number</dt><dd>Bus ${bus.id}</dd></div>
+                    <div><dt>Route</dt><dd>${bus.route}</dd></div>
+                    <div><dt>Current location</dt><dd>${bus.currentLocation}</dd></div>
+                    <div><dt>Next stop</dt><dd>${bus.nextStop}</dd></div>
+                    <div><dt>Expected arrival</dt><dd>${bus.arrival} minutes</dd></div>
+                    <div><dt>Occupancy</dt><dd>${bus.occupancy}%</dd></div>
+                    <div><dt>Delay</dt><dd>${bus.delay > 0 ? bus.delay + ' minutes' : 'None'}</dd></div>
+                    <div><dt>Status</dt><dd>${bus.status}</dd></div>
+                </dl>
+            `;
+
+            updateMapMarker(bus);
+        }
+
+        renderSelectedBus();
+
+        async function resolveDatabaseBus(selectedBus) {
+            if (!selectedBus || !selectedBus.id) {
+                return null;
+            }
+
+            try {
+                const response = await fetch('http://localhost:8080/api/buses', {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                if (!response.ok) {
+                    console.error('Unable to resolve selected bus database ID:', response.status);
+                    return null;
+                }
+
+                const buses = await response.json();
+                const selectedNumber = `Bus ${selectedBus.id}`;
+                return buses.find((bus) => bus.busNumber === selectedNumber)
+                    || buses.find((bus) => bus.busNumber === String(selectedBus.id))
+                    || null;
+            } catch (error) {
+                console.error('Unable to resolve selected bus database ID:', error);
+                return null;
+            }
+        }
+
+        async function loadBusLocation(bus) {
+            const message = document.getElementById('busLocationMessage');
+            const status = document.getElementById('busLocationStatus');
+            const latitude = document.getElementById('busLatitude');
+            const longitude = document.getElementById('busLongitude');
+            const lastUpdated = document.getElementById('busLastUpdated');
+            const mapElement = document.getElementById('selectedBusMap');
+
+            if (!bus || !bus.id) {
+                message.textContent = 'Selected bus information is missing.';
+                message.className = 'location-status error';
+                status.textContent = 'Unavailable';
+                status.className = 'location-unavailable';
+                return;
+            }
+
+            if (!window.L || !mapElement || mapElement.dataset.mapInitialized === 'true') return;
+
+            const map = window.L.map(mapElement).setView([20, 0], 2);
+            window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors',
+                maxZoom: 19
+            }).addTo(map);
+            mapElement.dataset.mapInitialized = 'true';
+
+            const busIcon = window.L.divIcon({
+                className: 'bus-location-icon',
+                html: '<span aria-hidden="true">🚌</span>',
+                iconSize: [36, 36],
+                iconAnchor: [18, 18]
+            });
+            let marker = null;
+
+            async function refreshLocation() {
+                try {
+                    const locationUrl = `http://localhost:8080/api/buses/${bus.databaseId}/location`;
+                    console.info('Requesting bus location:', locationUrl);
+                    console.info('Bus ID:', bus.databaseId);
+                    const response = await fetch(locationUrl, {
+                        method: 'GET',
+                        credentials: 'include'
+                    });
+                    console.info('Response status:', response.status);
+
+                    if (!response.ok) {
+                        let responseMessage = '';
+                        try {
+                            responseMessage = await response.text();
+                        } catch (readError) {
+                            console.error('Unable to read location error response:', readError);
+                        }
+                        const error = new Error(`HTTP ${response.status}`);
+                        error.status = response.status;
+                        error.responseMessage = responseMessage;
+                        if (response.status === 404 && responseMessage.includes('location is currently unavailable')) {
+                            error.code = 'MISSING_LOCATION';
+                        }
+                        throw error;
+                    }
+
+                    const location = await response.json();
+                    console.info('Location response:', location);
+                    if (location.latitude == null || location.longitude == null || location.lastUpdated == null) {
+                        const error = new Error('missing-location');
+                        error.code = 'MISSING_LOCATION';
+                        throw error;
+                    }
+                    const coordinates = [location.latitude, location.longitude];
+                    const updatedAt = new Date(location.lastUpdated);
+                    const isOutdated = Number.isNaN(updatedAt.getTime()) || Date.now() - updatedAt.getTime() > 120000;
+
+                    latitude.textContent = location.latitude.toFixed(6);
+                    longitude.textContent = location.longitude.toFixed(6);
+                    lastUpdated.textContent = Number.isNaN(updatedAt.getTime()) ? location.lastUpdated : updatedAt.toLocaleString();
+                    status.textContent = isOutdated ? 'Outdated' : '● Live';
+                    status.className = isOutdated ? 'location-outdated' : 'location-live';
+                    message.textContent = isOutdated ? '⚠ Location may be outdated.' : 'Live bus location updated.';
+                    message.className = isOutdated ? 'location-status error' : 'location-status success';
+
+                    map.setView(coordinates, 16);
+                    if (marker) {
+                        marker.setLatLng(coordinates);
+                    } else {
+                        marker = window.L.marker(coordinates, { icon: busIcon }).addTo(map);
+                    }
+                    marker.bindPopup(`🚌 ${location.busNumber} — Current Location`);
+                } catch (error) {
+                    console.error('Live bus location request failed:', error);
+                    if (bus.latitude != null && bus.longitude != null) {
+                        latitude.textContent = Number(bus.latitude).toFixed(6);
+                        longitude.textContent = Number(bus.longitude).toFixed(6);
+                        lastUpdated.textContent = bus.lastUpdated || new Date().toLocaleString();
+                        status.textContent = '● Demo live';
+                        status.className = 'location-live';
+                        message.textContent = 'Demo location loaded from the selected bus.';
+                        message.className = 'location-status success';
+                        const coordinates = [Number(bus.latitude), Number(bus.longitude)];
+                        map.setView(coordinates, 16);
+                        if (marker) {
+                            marker.setLatLng(coordinates);
+                        } else {
+                            marker = window.L.marker(coordinates, { icon: busIcon }).addTo(map);
+                        }
+                        marker.bindPopup(`🚌 ${bus.busNumber || `Bus ${bus.id}`} — Current Location`);
+                        return;
+                    }
+                    if (error.code === 'MISSING_LOCATION') {
+                        message.textContent = '⚠ Bus location is currently unavailable.';
+                    } else if (error.status === 401) {
+                        message.textContent = 'Authentication required.';
+                    } else if (error.status === 403) {
+                        message.textContent = 'Access denied by Spring Security.';
+                    } else if (error.status === 404) {
+                        message.textContent = 'Bus location API not found.';
+                    } else if (error.status >= 500) {
+                        message.textContent = 'Server error while getting bus location.';
+                    } else {
+                        message.textContent = error instanceof TypeError
+                            ? 'Unable to connect to SmartBus backend.'
+                            : 'Unable to connect to SmartBus backend.';
+                    }
+                    message.className = 'location-status error';
+                    status.textContent = 'Unavailable';
+                    status.className = 'location-unavailable';
+                }
+            }
+
+            const refreshButton = document.getElementById('refreshBusLocation');
+            if (refreshButton) {
+                refreshButton.addEventListener('click', refreshLocation);
+            }
+
+            await refreshLocation();
+            window.setInterval(refreshLocation, 5000);
+        }
+
+        const selectedBus = localStorage.getItem('selectedBus') || localStorage.getItem('smartbusSelectedBus');
+        const storedBus = selectedBus ? JSON.parse(selectedBus) : null;
+        resolveDatabaseBus(storedBus).then((databaseBus) => {
+            if (!databaseBus) {
+                loadBusLocation(storedBus ? { ...storedBus, databaseId: storedBus.id } : null);
+                return;
+            }
+
+            loadBusLocation({ ...storedBus, databaseId: databaseBus.id, busNumber: databaseBus.busNumber });
+        });
+    </script>
+</body>
+</html>

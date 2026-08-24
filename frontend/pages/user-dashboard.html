@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartBus AI - Passenger</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/background-effects.css">
+</head>
+<body class="passenger-body">
+    <header class="passenger-topbar">
+        <div class="brand-group">
+            <div class="brand-mark">SB</div>
+            <div>
+                <p class="eyebrow">SmartBus AI</p>
+                <h1>Passenger Portal</h1>
+            </div>
+        </div>
+
+        <nav class="passenger-nav" aria-label="Main navigation">
+            <a href="/pages/home.html">Home</a>
+            <a href="/pages/find-bus.html">Find Bus</a>
+            <a href="/pages/routes.html">Routes</a>
+            <a href="/pages/bus-timings.html">Bus Timings</a>
+            <a href="/pages/my-bus.html">My/Selected Bus</a>
+        </nav>
+
+        <button id="logoutButton" type="button" class="logout-btn">Logout</button>
+    </header>
+
+    <main class="passenger-shell">
+        <section class="search-panel" id="find-bus">
+            <div class="search-header">
+                <div>
+                    <p class="eyebrow accent">Plan your route</p>
+                    <h2>Find your next bus</h2>
+                </div>
+                <div class="mini-badge">Demo live route data</div>
+            </div>
+
+            <form id="busSearchForm" class="search-form">
+                <div class="field-block">
+                    <label for="fromStop">Starting location</label>
+                    <select id="fromStop">
+                        <option value="Mattuthavani">Mattuthavani</option>
+                        <option value="Central Station">Central Station</option>
+                        <option value="Periyar">Periyar</option>
+                        <option value="City Campus">City Campus</option>
+                        <option value="Ramanathapuram">Ramanathapuram</option>
+                        <option value="Airport">Airport</option>
+                    </select>
+                </div>
+
+                <div class="field-block">
+                    <label for="toStop">Destination</label>
+                    <select id="toStop">
+                        <option value="Periyar">Periyar</option>
+                        <option value="Central Station">Central Station</option>
+                        <option value="Mattuthavani">Mattuthavani</option>
+                        <option value="City Campus">City Campus</option>
+                        <option value="Ramanathapuram">Ramanathapuram</option>
+                        <option value="Airport">Airport</option>
+                    </select>
+                </div>
+
+                <div class="field-block">
+                    <label for="routeFilter">Route</label>
+                    <select id="routeFilter">
+                        <option value="all">All routes</option>
+                        <option value="A1">A1</option>
+                        <option value="B3">B3</option>
+                        <option value="C2">C2</option>
+                        <option value="D5">D5</option>
+                        <option value="E1">E1</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="primary-btn">Find Bus</button>
+            </form>
+        </section>
+
+        <section class="overview-grid">
+            <article class="overview-card card-blue">
+                <p>Active buses</p>
+                <h3>41</h3>
+                <span>On the network today</span>
+            </article>
+            <article class="overview-card card-green">
+                <p>Next departure</p>
+                <h3>08 min</h3>
+                <span>From Mattuthavani</span>
+            </article>
+            <article class="overview-card card-amber">
+                <p>Delayed routes</p>
+                <h3>3</h3>
+                <span>Weather / traffic advisory</span>
+            </article>
+        </section>
+
+        <section class="content-grid">
+            <article class="panel" id="routes">
+                <div class="panel-header">
+                    <h3>Available Buses</h3>
+                    <button id="refreshBuses" class="secondary-btn" type="button">Refresh</button>
+                </div>
+                <div id="busList" class="bus-list"></div>
+            </article>
+
+            <aside class="panel details-panel" id="selected-bus">
+                <div class="panel-header">
+                    <h3>Selected Bus</h3>
+                    <span class="detail-tag">My route</span>
+                </div>
+                <div id="selectedBusCard" class="selected-bus-card"></div>
+            </aside>
+        </section>
+
+        <section class="bottom-grid" id="bus-timings">
+            <article class="panel">
+                <div class="panel-header">
+                    <h3>Bus Timing</h3>
+                    <span class="detail-tag tag-light">Live demo</span>
+                </div>
+                <div class="timing-summary">
+                    <div class="timing-box">
+                        <span>Next bus</span>
+                        <strong id="nextBusValue">Bus 14</strong>
+                    </div>
+                    <div class="timing-box">
+                        <span>Expected arrival</span>
+                        <strong id="expectedArrivalValue">08 min</strong>
+                    </div>
+                    <div class="timing-box">
+                        <span>Next stop</span>
+                        <strong id="nextStopValue">Periyar</strong>
+                    </div>
+                    <div class="timing-box">
+                        <span>Journey time</span>
+                        <strong id="journeyTimeValue">18 min</strong>
+                    </div>
+                    <div class="timing-box">
+                        <span>Operating hours</span>
+                        <strong id="operatingHoursValue">05:30 - 22:00</strong>
+                    </div>
+                </div>
+            </article>
+
+            <article class="panel">
+                <div class="panel-header">
+                    <h3>Live Bus Location</h3>
+                    <span class="detail-tag tag-light">Simulated</span>
+                </div>
+
+                <div class="map-panel" aria-label="Demo live bus map">
+                    <div class="map-route"></div>
+                    <div class="map-stop stop-1">S1</div>
+                    <div class="map-stop stop-2">S2</div>
+                    <div class="map-stop stop-3">S3</div>
+                    <div class="map-stop stop-4">S4</div>
+                    <div class="map-marker passenger">You</div>
+                    <div class="map-marker bus active" id="mapBusMarker">Bus 14</div>
+                    <div class="map-legend">
+                        <span><i class="legend-dot passenger-dot"></i> You</span>
+                        <span><i class="legend-dot bus-dot"></i> Bus</span>
+                        <span><i class="legend-dot stop-dot"></i> Stops</span>
+                    </div>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <script src="../js/script.js"></script>
+    <script src="../js/background-effects.js"></script>
+    <script>
+        const busData = [
+            {
+                id: 14,
+                route: 'A1',
+                from: 'Mattuthavani',
+                to: 'Periyar',
+                status: 'On Time',
+                arrival: 8,
+                distance: 2.4,
+                occupancy: 72,
+                currentLocation: 'Near Kamarajar Road',
+                nextStop: 'Periyar Bus Stand',
+                delay: 0,
+                journeyTime: 18,
+                hours: '05:30 - 22:00'
+            },
+            {
+                id: 27,
+                route: 'B3',
+                from: 'Mattuthavani',
+                to: 'Central Station',
+                status: 'Delayed',
+                arrival: 15,
+                distance: 4.1,
+                occupancy: 82,
+                currentLocation: 'Near Anna Nagar',
+                nextStop: 'Central Station',
+                delay: 8,
+                journeyTime: 24,
+                hours: '06:00 - 21:30'
+            },
+            {
+                id: 9,
+                route: 'C2',
+                from: 'Ramanathapuram',
+                to: 'City Campus',
+                status: 'On Time',
+                arrival: 6,
+                distance: 1.8,
+                occupancy: 58,
+                currentLocation: 'Near University Gate',
+                nextStop: 'City Campus',
+                delay: 0,
+                journeyTime: 14,
+                hours: '05:45 - 21:45'
+            },
+            {
+                id: 33,
+                route: 'D5',
+                from: 'Airport',
+                to: 'Central Station',
+                status: 'Maintenance',
+                arrival: 19,
+                distance: 5.6,
+                occupancy: 34,
+                currentLocation: 'Service Bay',
+                nextStop: 'Airport Terminal',
+                delay: 0,
+                journeyTime: 26,
+                hours: '07:00 - 20:00'
+            },
+            {
+                id: 41,
+                route: 'E1',
+                from: 'Periyar',
+                to: 'Airport',
+                status: 'On Time',
+                arrival: 11,
+                distance: 3.2,
+                occupancy: 80,
+                currentLocation: 'Near Airport Road',
+                nextStop: 'Airport',
+                delay: 0,
+                journeyTime: 20,
+                hours: '06:15 - 22:15'
+            }
+        ];
+
+        const busList = document.getElementById('busList');
+        const selectedBusCard = document.getElementById('selectedBusCard');
+        const busSearchForm = document.getElementById('busSearchForm');
+        const fromStop = document.getElementById('fromStop');
+        const toStop = document.getElementById('toStop');
+        const routeFilter = document.getElementById('routeFilter');
+        const refreshBuses = document.getElementById('refreshBuses');
+
+        let selectedBus = busData[0];
+
+        function statusClass(status) {
+            if (status === 'Delayed') return 'status-warning';
+            if (status === 'Maintenance') return 'status-danger';
+            return 'status-good';
+        }
+
+        function saveSelectedBus(bus) {
+            const demoCoordinates = {
+                14: [9.9252, 78.1198],
+                27: [9.9340, 78.1283],
+                9: [9.9125, 78.1250],
+                33: [9.8340, 78.0930],
+                41: [9.9180, 78.1100]
+            };
+            const [latitude, longitude] = demoCoordinates[bus.id] || [];
+            localStorage.setItem('selectedBus', JSON.stringify({
+                ...bus,
+                busNumber: `Bus ${bus.id}`,
+                latitude,
+                longitude,
+                lastUpdated: new Date().toISOString()
+            }));
+        }
+
+        function setBusTiming(bus) {
+            const nextBusValue = document.getElementById('nextBusValue');
+            const expectedArrivalValue = document.getElementById('expectedArrivalValue');
+            const nextStopValue = document.getElementById('nextStopValue');
+            const journeyTimeValue = document.getElementById('journeyTimeValue');
+            const operatingHoursValue = document.getElementById('operatingHoursValue');
+
+            if (nextBusValue) nextBusValue.textContent = `Bus ${bus.id}`;
+            if (expectedArrivalValue) expectedArrivalValue.textContent = `${bus.arrival} min`;
+            if (nextStopValue) nextStopValue.textContent = bus.nextStop;
+            if (journeyTimeValue) journeyTimeValue.textContent = `${bus.journeyTime} min`;
+            if (operatingHoursValue) operatingHoursValue.textContent = bus.hours;
+        }
+
+        function renderBusCards(items) {
+            if (!busList) return;
+
+            if (!items || items.length === 0) {
+                busList.innerHTML = '<div class="empty-state">No buses found for the selected route. Please try another combination.</div>';
+                return;
+            }
+
+            busList.innerHTML = items.map((bus) => `
+                <button type="button" class="bus-card ${selectedBus && selectedBus.id === bus.id ? 'selected' : ''}" data-bus-id="${bus.id}">
+                    <div class="bus-card-head">
+                        <div>
+                            <p class="bus-label">Bus ${bus.id}</p>
+                            <h4>Route ${bus.route}</h4>
+                        </div>
+                        <span class="status-pill ${statusClass(bus.status)}">${bus.status}</span>
+                    </div>
+                    <div class="bus-route-line">
+                        <span>${bus.from}</span>
+                        <span class="route-arrow">→</span>
+                        <span>${bus.to}</span>
+                    </div>
+                    <div class="bus-meta-grid">
+                        <div><span>Arrives in</span><strong>${bus.arrival} min</strong></div>
+                        <div><span>Distance</span><strong>${bus.distance} km</strong></div>
+                        <div><span>Occupancy</span><strong>${bus.occupancy}%</strong></div>
+                    </div>
+                </button>
+            `).join('');
+
+            busList.querySelectorAll('.bus-card').forEach((card) => {
+                card.addEventListener('click', () => {
+                    const busId = Number(card.dataset.busId);
+                    const bus = busData.find((item) => item.id === busId);
+                    if (bus) {
+                        selectedBus = bus;
+                        saveSelectedBus(bus);
+                        renderBusCards(getFilteredBuses());
+                        renderSelectedBus();
+                        setBusTiming(bus);
+                        updateMapMarker(bus);
+                    }
+                });
+            });
+        }
+
+        function renderSelectedBus() {
+            if (!selectedBusCard) return;
+
+            const bus = selectedBus;
+            if (!bus) {
+                selectedBusCard.innerHTML = '<div class="empty-state">Select a route to view trip details.</div>';
+                return;
+            }
+
+            selectedBusCard.innerHTML = `
+                <div class="selected-bus-header">
+                    <div>
+                        <p class="bus-label">Bus ${bus.id}</p>
+                        <h4>Route ${bus.route}</h4>
+                    </div>
+                    <span class="status-pill ${statusClass(bus.status)}">${bus.status}</span>
+                </div>
+
+                <dl class="detail-list">
+                    <div><dt>Bus number</dt><dd>Bus ${bus.id}</dd></div>
+                    <div><dt>Route</dt><dd>${bus.route}</dd></div>
+                    <div><dt>Current location</dt><dd>${bus.currentLocation}</dd></div>
+                    <div><dt>Next stop</dt><dd>${bus.nextStop}</dd></div>
+                    <div><dt>Expected arrival</dt><dd>${bus.arrival} minutes</dd></div>
+                    <div><dt>Occupancy</dt><dd>${bus.occupancy}%</dd></div>
+                    <div><dt>Status</dt><dd>${bus.status}</dd></div>
+                    <div><dt>Delay</dt><dd>${bus.delay > 0 ? bus.delay + ' minutes' : 'None'}</dd></div>
+                </dl>
+            `;
+        }
+
+        function getFilteredBuses() {
+            const start = fromStop.value;
+            const end = toStop.value;
+            const route = routeFilter.value;
+
+            return busData.filter((bus) => {
+                const matchesFrom = start ? bus.from === start : true;
+                const matchesTo = end ? bus.to === end : true;
+                const matchesRoute = route === 'all' ? true : bus.route === route;
+                return matchesFrom && matchesTo && matchesRoute;
+            });
+        }
+
+        function updateMapMarker(bus) {
+            const busMarker = document.getElementById('mapBusMarker');
+            if (!busMarker) return;
+
+            busMarker.textContent = `Bus ${bus.id}`;
+            const statusClassName = statusClass(bus.status);
+            busMarker.className = `map-marker bus active ${statusClassName}`;
+
+            const markerPositions = [
+                { top: '24%', left: '52%' },
+                { top: '36%', left: '67%' },
+                { top: '58%', left: '48%' },
+                { top: '46%', left: '32%' },
+                { top: '26%', left: '41%' }
+            ];
+            const position = markerPositions[(bus.id - 1) % markerPositions.length];
+            busMarker.style.top = position.top;
+            busMarker.style.left = position.left;
+
+            if (bus.status === 'Delayed') {
+                busMarker.style.background = '#fef3c7';
+                busMarker.style.color = '#92400e';
+            } else if (bus.status === 'Maintenance') {
+                busMarker.style.background = '#fee2e2';
+                busMarker.style.color = '#991b1b';
+            } else {
+                busMarker.style.background = '#dbeafe';
+                busMarker.style.color = '#1d4ed8';
+            }
+        }
+
+        busSearchForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const filtered = getFilteredBuses();
+            if (filtered.length > 0) {
+                selectedBus = filtered[0];
+                saveSelectedBus(selectedBus);
+                renderBusCards(filtered);
+                renderSelectedBus();
+                setBusTiming(selectedBus);
+                updateMapMarker(selectedBus);
+            } else {
+                selectedBus = null;
+                busList.innerHTML = '<div class="empty-state">No buses found for the selected route. Please try another combination.</div>';
+                selectedBusCard.innerHTML = '<div class="empty-state">No buses found. Please try another route.</div>';
+                const nextBusValue = document.getElementById('nextBusValue');
+                const expectedArrivalValue = document.getElementById('expectedArrivalValue');
+                const nextStopValue = document.getElementById('nextStopValue');
+                const journeyTimeValue = document.getElementById('journeyTimeValue');
+                const operatingHoursValue = document.getElementById('operatingHoursValue');
+                if (nextBusValue) nextBusValue.textContent = 'No route';
+                if (expectedArrivalValue) expectedArrivalValue.textContent = '—';
+                if (nextStopValue) nextStopValue.textContent = '—';
+                if (journeyTimeValue) journeyTimeValue.textContent = '—';
+                if (operatingHoursValue) operatingHoursValue.textContent = '—';
+                const busMarker = document.getElementById('mapBusMarker');
+                if (busMarker) {
+                    busMarker.textContent = 'No bus';
+                    busMarker.style.top = '50%';
+                    busMarker.style.left = '50%';
+                    busMarker.style.background = '#e2e8f0';
+                    busMarker.style.color = '#475569';
+                }
+            }
+        });
+
+        refreshBuses.addEventListener('click', () => {
+            const filtered = getFilteredBuses();
+            selectedBus = filtered[0] || busData[0];
+            saveSelectedBus(selectedBus);
+            renderBusCards(filtered.length ? filtered : busData);
+            renderSelectedBus();
+            setBusTiming(selectedBus);
+            updateMapMarker(selectedBus);
+        });
+
+        renderBusCards(getFilteredBuses());
+        renderSelectedBus();
+        setBusTiming(selectedBus);
+        updateMapMarker(selectedBus);
+    </script>
+</body>
+</html>

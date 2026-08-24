@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartBus AI Dashboard</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/background-effects.css">
+</head>
+<body class="dashboard-body">
+    <div class="dashboard-shell">
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">SmartBus AI</p>
+                <h1>Operations Dashboard</h1>
+            </div>
+            <div class="topbar-actions">
+                <div class="session-pill">
+                    <span class="status-dot"></span>
+                    <span id="dashboardRole">ADMIN</span>
+                </div>
+                <button id="logoutButton" type="button">Logout</button>
+            </div>
+        </header>
+
+        <section class="welcome-panel">
+            <div>
+                <p class="eyebrow accent">Live status</p>
+                <h2>Welcome, <span id="dashboardUser">Operations Staff</span></h2>
+            </div>
+            <div class="timestamp-box">
+                <span>Updated</span>
+                <strong id="dashboardTime">--:--</strong>
+            </div>
+        </section>
+
+        <section class="stats-grid">
+            <article class="metric-card metric-blue">
+                <p>Total Buses</p>
+                <h3>48</h3>
+                <span>Across 6 city corridors</span>
+            </article>
+            <article class="metric-card metric-green">
+                <p>Active Buses</p>
+                <h3>41</h3>
+                <span>87% fleet in service</span>
+            </article>
+            <article class="metric-card metric-amber">
+                <p>Delayed Buses</p>
+                <h3>3</h3>
+                <span>Traffic congestion alerts</span>
+            </article>
+            <article class="metric-card metric-purple">
+                <p>Total Routes</p>
+                <h3>17</h3>
+                <span>Urban and university loops</span>
+            </article>
+            <article class="metric-card metric-red">
+                <p>Current Occupancy</p>
+                <h3>72%</h3>
+                <span>Peak commuter demand</span>
+            </article>
+        </section>
+
+        <section class="content-grid">
+            <article class="panel">
+                <div class="panel-header">
+                    <h3>Bus Status Overview</h3>
+                    <span class="chip chip-live">Live</span>
+                </div>
+                <div class="status-list">
+                    <div class="status-row">
+                        <div>
+                            <strong>Bus 14</strong>
+                            <small>Route A1 - Central Station</small>
+                        </div>
+                        <span class="status good">On Time</span>
+                    </div>
+                    <div class="status-row">
+                        <div>
+                            <strong>Bus 27</strong>
+                            <small>Route B3 - City Campus</small>
+                        </div>
+                        <span class="status warning">Delayed</span>
+                    </div>
+                    <div class="status-row">
+                        <div>
+                            <strong>Bus 09</strong>
+                            <small>Route C2 - Riverside</small>
+                        </div>
+                        <span class="status good">On Time</span>
+                    </div>
+                    <div class="status-row">
+                        <div>
+                            <strong>Bus 33</strong>
+                            <small>Route D5 - Tech Park</small>
+                        </div>
+                        <span class="status danger">Maintenance</span>
+                    </div>
+                    <div class="status-row">
+                        <div>
+                            <strong>Bus 41</strong>
+                            <small>Route E1 - Airport Link</small>
+                        </div>
+                        <span class="status good">On Time</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="panel">
+                <div class="panel-header">
+                    <h3>Recent Alerts</h3>
+                    <span class="chip chip-alert">3</span>
+                </div>
+                <ul class="alert-list">
+                    <li>
+                        <span class="alert-dot alert-amber"></span>
+                        <div>
+                            <strong>Traffic congestion</strong>
+                            <small>Bus 27 delayed by 8 minutes on Route B3</small>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="alert-dot alert-red"></span>
+                        <div>
+                            <strong>Maintenance check</strong>
+                            <small>Bus 33 moved to service bay for inspection</small>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="alert-dot alert-blue"></span>
+                        <div>
+                            <strong>Passenger spike</strong>
+                            <small>Route E1 occupancy above 80% during peak hour</small>
+                        </div>
+                    </li>
+                </ul>
+            </article>
+        </section>
+
+        <section class="bottom-grid">
+            <article class="panel">
+                <div class="panel-header">
+                    <h3>Passenger Demand Summary</h3>
+                </div>
+                <div class="demand-chart">
+                    <div class="bar-group">
+                        <span class="bar-label">Mon</span>
+                        <div class="bar" style="height: 52%"></div>
+                    </div>
+                    <div class="bar-group">
+                        <span class="bar-label">Tue</span>
+                        <div class="bar" style="height: 67%"></div>
+                    </div>
+                    <div class="bar-group">
+                        <span class="bar-label">Wed</span>
+                        <div class="bar" style="height: 74%"></div>
+                    </div>
+                    <div class="bar-group">
+                        <span class="bar-label">Thu</span>
+                        <div class="bar" style="height: 81%"></div>
+                    </div>
+                    <div class="bar-group">
+                        <span class="bar-label">Fri</span>
+                        <div class="bar" style="height: 91%"></div>
+                    </div>
+                    <div class="bar-group">
+                        <span class="bar-label">Sat</span>
+                        <div class="bar" style="height: 64%"></div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="panel">
+                <div class="panel-header">
+                    <h3>Network Health</h3>
+                </div>
+                <div class="health-summary">
+                    <div class="health-row">
+                        <span>Communication</span>
+                        <strong>98.4%</strong>
+                    </div>
+                    <div class="health-row">
+                        <span>Fleet reliability</span>
+                        <strong>94.1%</strong>
+                    </div>
+                    <div class="health-row">
+                        <span>Route adherence</span>
+                        <strong>96.8%</strong>
+                    </div>
+                    <div class="health-row">
+                        <span>Safety compliance</span>
+                        <strong>99.2%</strong>
+                    </div>
+                </div>
+            </article>
+        </section>
+    </div>
+
+    <script src="../js/script.js"></script>
+    <script src="../js/background-effects.js"></script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartBus AI - Routes</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/background-effects.css">
+</head>
+<body class="passenger-body">
+    <header class="passenger-topbar">
+        <div class="brand-group">
+            <div class="brand-mark">SB</div>
+            <div>
+                <p class="eyebrow">SmartBus AI</p>
+                <h1>Passenger Portal</h1>
+            </div>
+        </div>
+
+        <nav class="passenger-nav" aria-label="Main navigation">
+            <a href="/pages/home.html">Home</a>
+            <a href="/pages/find-bus.html">Find Bus</a>
+            <a href="/pages/routes.html">Routes</a>
+            <a href="/pages/bus-timings.html">Bus Timings</a>
+            <a href="/pages/my-bus.html">My/Selected Bus</a>
+            <button id="logoutButton" type="button" class="logout-btn">Logout</button>
+        </nav>
+    </header>
+
+    <main class="passenger-shell">
+        <section class="search-panel">
+            <div class="search-header">
+                <div>
+                    <p class="eyebrow accent">Transit overview</p>
+                    <h2>Available bus routes</h2>
+                </div>
+                <div class="mini-badge">Demo route network</div>
+            </div>
+        </section>
+
+        <section class="panel">
+            <div id="routeList" class="bus-list"></div>
+        </section>
+    </main>
+
+    <script src="../js/script.js"></script>
+    <script src="../js/background-effects.js"></script>
+    <script>
+        const routeData = [
+            { route: 'A1', name: 'Mattuthavani to Periyar', start: 'Mattuthavani', destination: 'Periyar', stops: ['Mattuthavani', 'Alandur', 'Kamarajar Road', 'Periyar'], journeyTime: '18 min', distance: '2.4 km', buses: 6, status: 'On Time' },
+            { route: 'B3', name: 'Mattuthavani to Central Station', start: 'Mattuthavani', destination: 'Central Station', stops: ['Mattuthavani', 'Anna Nagar', 'Pudur', 'Central Station'], journeyTime: '24 min', distance: '4.1 km', buses: 4, status: 'Delayed' },
+            { route: 'C2', name: 'Ramanathapuram to City Campus', start: 'Ramanathapuram', destination: 'City Campus', stops: ['Ramanathapuram', 'University Gate', 'City Campus'], journeyTime: '14 min', distance: '1.8 km', buses: 3, status: 'On Time' },
+            { route: 'D5', name: 'Airport to Central Station', start: 'Airport', destination: 'Central Station', stops: ['Airport', 'Airport Road', 'SIPCOT', 'Central Station'], journeyTime: '26 min', distance: '5.6 km', buses: 2, status: 'Maintenance' },
+            { route: 'E1', name: 'Periyar to Airport', start: 'Periyar', destination: 'Airport', stops: ['Periyar', 'Airport Road', 'Airport'], journeyTime: '20 min', distance: '3.2 km', buses: 5, status: 'On Time' }
+        ];
+
+        const routeList = document.getElementById('routeList');
+
+        function statusClass(status) {
+            if (status === 'Delayed') return 'status-warning';
+            if (status === 'Maintenance') return 'status-danger';
+            return 'status-good';
+        }
+
+        routeList.innerHTML = routeData.map((route) => `
+            <div class="bus-card" data-route="${route.route}">
+                <div class="bus-card-head">
+                    <div>
+                        <p class="bus-label">Route ${route.route}</p>
+                        <h4>${route.name}</h4>
+                    </div>
+                    <span class="status-pill ${statusClass(route.status)}">${route.status}</span>
+                </div>
+
+                <div class="bus-route-line">
+                    <span>${route.start}</span>
+                    <span class="route-arrow">→</span>
+                    <span>${route.destination}</span>
+                </div>
+
+                <div class="bus-meta-grid">
+                    <div>
+                        <span>Stops</span>
+                        <strong>${route.stops.length}</strong>
+                    </div>
+                    <div>
+                        <span>Journey time</span>
+                        <strong>${route.journeyTime}</strong>
+                    </div>
+                    <div>
+                        <span>Distance</span>
+                        <strong>${route.distance}</strong>
+                    </div>
+                    <div>
+                        <span>Buses</span>
+                        <strong>${route.buses}</strong>
+                    </div>
+                </div>
+
+                <div style="margin-top: 14px;">
+                    <button type="button" class="primary-btn view-route-btn" data-route="${route.route}" data-start="${route.start}" data-destination="${route.destination}">View Buses</button>
+                </div>
+            </div>
+        `).join('');
+
+        routeList.querySelectorAll('.view-route-btn').forEach((button) => {
+            button.addEventListener('click', () => {
+                const route = button.dataset.route;
+                const start = button.dataset.start;
+                const destination = button.dataset.destination;
+                window.location.href = `/pages/find-bus.html?from=${encodeURIComponent(start)}&to=${encodeURIComponent(destination)}&route=${encodeURIComponent(route)}`;
+            });
+        });
+    </script>
+</body>
+</html>

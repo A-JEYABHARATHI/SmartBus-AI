@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartBus AI - Bus Timings</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/background-effects.css">
+</head>
+<body class="passenger-body">
+    <header class="passenger-topbar">
+        <div class="brand-group">
+            <div class="brand-mark">SB</div>
+            <div>
+                <p class="eyebrow">SmartBus AI</p>
+                <h1>Passenger Portal</h1>
+            </div>
+        </div>
+
+        <nav class="passenger-nav" aria-label="Main navigation">
+            <a href="/pages/home.html">Home</a>
+            <a href="/pages/find-bus.html">Find Bus</a>
+            <a href="/pages/routes.html">Routes</a>
+            <a href="/pages/bus-timings.html">Bus Timings</a>
+            <a href="/pages/my-bus.html">My/Selected Bus</a>
+            <button id="logoutButton" type="button" class="logout-btn">Logout</button>
+        </nav>
+    </header>
+
+    <main class="passenger-shell">
+        <section class="search-panel">
+            <div class="search-header">
+                <div>
+                    <p class="eyebrow accent">Timetable</p>
+                    <h2>Bus timings</h2>
+                </div>
+                <div class="mini-badge">Live demo schedule</div>
+            </div>
+        </section>
+
+        <section class="panel">
+            <div id="timingList" class="bus-list"></div>
+        </section>
+    </main>
+
+    <script src="../js/script.js"></script>
+    <script src="../js/background-effects.js"></script>
+    <script>
+        const busData = [
+            { id: 14, route: 'A1', from: 'Mattuthavani', to: 'Periyar', status: 'On Time', arrival: 8, occupancy: 72, currentLocation: 'Near Kamarajar Road', nextStop: 'Periyar Bus Stand', delay: 0, journeyTime: 18, hours: '05:30 - 22:00' },
+            { id: 27, route: 'B3', from: 'Mattuthavani', to: 'Central Station', status: 'Delayed', arrival: 15, occupancy: 82, currentLocation: 'Near Anna Nagar', nextStop: 'Central Station', delay: 8, journeyTime: 24, hours: '06:00 - 21:30' },
+            { id: 9, route: 'C2', from: 'Ramanathapuram', to: 'City Campus', status: 'On Time', arrival: 6, occupancy: 58, currentLocation: 'Near University Gate', nextStop: 'City Campus', delay: 0, journeyTime: 14, hours: '05:45 - 21:45' },
+            { id: 33, route: 'D5', from: 'Airport', to: 'Central Station', status: 'Maintenance', arrival: 19, occupancy: 34, currentLocation: 'Service Bay', nextStop: 'Airport Terminal', delay: 0, journeyTime: 26, hours: '07:00 - 20:00' },
+            { id: 41, route: 'E1', from: 'Periyar', to: 'Airport', status: 'On Time', arrival: 11, occupancy: 80, currentLocation: 'Near Airport Road', nextStop: 'Airport', delay: 0, journeyTime: 20, hours: '06:15 - 22:15' }
+        ];
+
+        const timingList = document.getElementById('timingList');
+
+        function statusClass(status) {
+            if (status === 'Delayed') return 'status-warning';
+            if (status === 'Maintenance') return 'status-danger';
+            return 'status-good';
+        }
+
+        timingList.innerHTML = busData.map((bus) => `
+            <div class="bus-card">
+                <div class="bus-card-head">
+                    <div>
+                        <p class="bus-label">Bus ${bus.id}</p>
+                        <h4>Route ${bus.route}</h4>
+                    </div>
+                    <span class="status-pill ${statusClass(bus.status)}">${bus.status}</span>
+                </div>
+
+                <div class="bus-route-line">
+                    <span>${bus.from}</span>
+                    <span class="route-arrow">→</span>
+                    <span>${bus.to}</span>
+                </div>
+
+                <div class="bus-meta-grid">
+                    <div><span>Next departure</span><strong>${bus.arrival} min</strong></div>
+                    <div><span>Expected arrival</span><strong>${bus.arrival} min</strong></div>
+                    <div><span>Next stop</span><strong>${bus.nextStop}</strong></div>
+                    <div><span>Hours</span><strong>${bus.hours}</strong></div>
+                </div>
+            </div>
+        `).join('');
+    </script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+/* Shared SmartBus ambient background layer */
+.smartbus-background {
+    position: fixed;
+    z-index: 0;
+    inset: 0;
+    overflow: hidden;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #06152b 0%, #0d2a4a 50%, #0c536c 100%);
+    pointer-events: none;
+}
+
+.smartbus-background::before,
+.smartbus-background::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.smartbus-background::before {
+    width: 58vw;
+    height: 58vw;
+    top: -28vw;
+    right: -14vw;
+    background: radial-gradient(circle, rgba(34, 211, 238, 0.18), rgba(34, 211, 238, 0) 68%);
+    filter: blur(10px);
+    animation: backgroundMove 18s ease-in-out infinite alternate;
+}
+
+.smartbus-background::after {
+    width: 48vw;
+    height: 48vw;
+    bottom: -25vw;
+    left: -15vw;
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.22), rgba(37, 99, 235, 0) 70%);
+    filter: blur(14px);
+    animation: backgroundMove 22s ease-in-out infinite alternate-reverse;
+}
+
+.smartbus-grid {
+    position: absolute;
+    inset: 0;
+    opacity: 0.11;
+    background-image: linear-gradient(rgba(125, 211, 252, 0.18) 1px, transparent 1px), linear-gradient(90deg, rgba(125, 211, 252, 0.18) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: linear-gradient(to bottom, black, transparent 90%);
+}
+
+.smartbus-particles {
+    position: absolute;
+    inset: 0;
+}
+
+.smartbus-particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #67e8f9;
+    box-shadow: 0 0 12px rgba(103, 232, 249, 0.8);
+    opacity: 0.35;
+    animation: particleFloat var(--particle-duration, 16s) ease-in-out infinite;
+    animation-delay: var(--particle-delay, 0s);
+}
+
+.smartbus-route-line {
+    position: absolute;
+    height: 1px;
+    border-top: 1px dashed rgba(125, 211, 252, 0.3);
+    transform-origin: left center;
+    animation: routeMove 16s linear infinite;
+}
+
+.smartbus-route-line.route-one { width: 42vw; left: -4vw; top: 32%; transform: rotate(18deg); }
+.smartbus-route-line.route-two { width: 36vw; right: -4vw; top: 68%; transform: rotate(-24deg); animation-delay: -6s; }
+.smartbus-route-line.route-three { width: 28vw; left: 33%; top: 10%; transform: rotate(72deg); animation-delay: -11s; }
+
+.smartbus-gps {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border: 2px solid rgba(165, 243, 252, 0.8);
+    border-radius: 50%;
+    background: #0e7490;
+    box-shadow: 0 0 0 7px rgba(34, 211, 238, 0.08), 0 0 18px rgba(34, 211, 238, 0.7);
+    animation: pulse 4s ease-in-out infinite;
+}
+
+.smartbus-gps.gps-one { left: 12%; top: 25%; }
+.smartbus-gps.gps-two { right: 18%; top: 42%; animation-delay: -1.5s; }
+.smartbus-gps.gps-three { left: 64%; bottom: 18%; animation-delay: -3s; }
+
+.smartbus-content {
+    position: relative;
+    z-index: 2;
+}
+
+@keyframes backgroundMove {
+    from { transform: translate3d(-2%, 2%, 0) scale(1); }
+    to { transform: translate3d(4%, -4%, 0) scale(1.08); }
+}
+
+@keyframes particleFloat {
+    0%, 100% { transform: translate3d(0, 8px, 0); }
+    50% { transform: translate3d(12px, -24px, 0); }
+}
+
+@keyframes routeMove {
+    from { opacity: 0.15; background-position: 0 0; }
+    50% { opacity: 0.5; }
+    to { opacity: 0.15; background-position: 140px 0; }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(0.9); opacity: 0.65; }
+    50% { transform: scale(1.25); opacity: 1; }
+}
+
+@media (max-width: 600px) {
+    .smartbus-grid { background-size: 34px 34px; opacity: 0.08; }
+    .smartbus-route-line.route-one { width: 72vw; }
+    .smartbus-route-line.route-two { width: 64vw; }
+    .smartbus-particle:nth-child(n + 7) { display: none; }
+    .smartbus-gps { transform: scale(0.8); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .smartbus-background *,
+    .smartbus-background::before,
+    .smartbus-background::after {
+        animation: none !important;
+    }
+}

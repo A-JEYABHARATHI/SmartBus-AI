@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartBus AI - Live Buses</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/background-effects.css">
+</head>
+<body class="passenger-body">
+    <header class="passenger-topbar">
+        <div class="brand-group">
+            <div class="brand-mark">SB</div>
+            <div><p class="eyebrow">SmartBus AI</p><h1>Passenger Portal</h1></div>
+        </div>
+        <nav class="passenger-nav" aria-label="Main navigation">
+            <a href="/pages/home.html">Home</a><a href="/pages/buses.html" aria-current="page">Live Buses</a><a href="/pages/find-bus.html">Find Bus</a><a href="/pages/routes.html">Routes</a><a href="/pages/bus-timings.html">Bus Timings</a><a href="/pages/predictions.html">Predictions</a><a href="/pages/my-bus.html">My Bus</a><button id="logoutButton" type="button" class="logout-btn">Logout</button>
+        </nav>
+    </header>
+    <main class="passenger-shell">
+        <section class="search-panel page-intro">
+            <div><p class="eyebrow accent">Network pulse</p><h2>Live buses</h2><p>See the buses currently moving through the SmartBus network.</p></div>
+            <div class="live-summary"><strong>41</strong><span>active buses</span></div>
+        </section>
+        <section class="live-buses-layout">
+            <div class="panel"><div class="panel-header"><h3>On the road now</h3><span class="detail-tag">Live feed</span></div><div class="live-bus-list">
+                <article class="live-bus-card"><div class="live-bus-icon">🚌</div><div><strong>Bus 14</strong><span>Route A1 · Mattuthavani to Periyar</span><small>Near Kamarajar Road · Next stop Periyar Bus Stand</small></div><b class="status-good">On Time</b></article>
+                <article class="live-bus-card"><div class="live-bus-icon">🚌</div><div><strong>Bus 27</strong><span>Route B3 · Mattuthavani to Central Station</span><small>Near Anna Nagar · 8 min delay</small></div><b class="status-warning">Delayed</b></article>
+                <article class="live-bus-card"><div class="live-bus-icon">🚌</div><div><strong>Bus 9</strong><span>Route C2 · Ramanathapuram to City Campus</span><small>Near University Gate · Next stop City Campus</small></div><b class="status-good">On Time</b></article>
+            </div></div>
+            <div class="network-map panel" aria-label="SmartBus live network map"><div class="network-map-line"></div><span class="network-marker marker-a">14</span><span class="network-marker marker-b">27</span><span class="network-marker marker-c">9</span><p>Network coverage · Madurai</p></div>
+        </section>
+    </main>
+    <script src="../js/script.js"></script>
+    <script src="../js/background-effects.js"></script>
+</body>
+</html>
