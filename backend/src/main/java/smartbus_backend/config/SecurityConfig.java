@@ -71,7 +71,7 @@ public class SecurityConfig {
 
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:8000",
-                "http://127.0.0.1:8000"
+                "http://127.0.0.1:8000",
                  "https://a-jeyabharathi.github.io"
         ));
 
