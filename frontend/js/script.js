@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
-                const response = await fetch('http://localhost:8080/api/auth/login', {
+                const response = await fetch('https://smartbus-ai-backend.onrender.com/api/auth/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
-                const registrationUrl = 'http://localhost:8080/api/auth/register';
+                const registrationUrl = 'http://smartbus-ai-backend.onrender.com/api/auth/register';
                 console.info('Registration request:', registrationUrl, {
                     method: 'POST',
                     username,
@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (logoutButton) {
         logoutButton.addEventListener('click', async () => {
             try {
-                await fetch('http://localhost:8080/api/auth/logout', {
+                await fetch('https://smartbus-ai-backend.onrender.com/api/auth/logout', {
                     method: 'POST',
                     credentials: 'include'
                 });
@@ -312,7 +312,7 @@ function initializeLocationMap() {
 
 async function fetchCurrentUser(dashboardUser, dashboardRole) {
     try {
-        const response = await fetch('http://localhost:8080/api/auth/me', {
+        const response = await fetch('https://smartbus-ai-backend.onrender.com/api/auth/me', {
             method: 'GET',
             credentials: 'include'
         });

@@ -1,6 +1,5 @@
 package smartbus_backend.config;
 
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.springframework.context.annotation.Configuration;
@@ -12,18 +11,22 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        Path frontendRoot = Paths.get(System.getProperty("user.dir"), "..", "frontend").toAbsolutePath().normalize();
+
+        String frontendRoot = Paths.get(
+                System.getProperty("user.dir"),
+                "frontend"
+        ).toAbsolutePath().normalize().toString();
 
         registry.addResourceHandler("/login.html")
-                .addResourceLocations("file:" + frontendRoot.resolve("pages").toString() + "/");
+                .addResourceLocations("file:" + frontendRoot + "/pages/");
 
         registry.addResourceHandler("/css/**")
-                .addResourceLocations("file:" + frontendRoot.resolve("css").toString() + "/");
+                .addResourceLocations("file:" + frontendRoot + "/css/");
 
         registry.addResourceHandler("/js/**")
-                .addResourceLocations("file:" + frontendRoot.resolve("js").toString() + "/");
+                .addResourceLocations("file:" + frontendRoot + "/js/");
 
         registry.addResourceHandler("/pages/**")
-                .addResourceLocations("file:" + frontendRoot.resolve("pages").toString() + "/");
+                .addResourceLocations("file:" + frontendRoot + "/pages/");
     }
 }
