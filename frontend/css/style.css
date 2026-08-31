@@ -2080,10 +2080,17 @@ body {
 
 .entry-body {
     min-height: 100vh;
+    height: 100vh;
+    box-sizing: border-box;
+
     display: grid;
     place-items: center;
+
     padding: 40px;
-    overflow: hidden;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
     background: linear-gradient(135deg, #071a33, #0e7490);
 }
 
@@ -2092,7 +2099,9 @@ body {
     grid-template-columns: minmax(0, 0.9fr) minmax(420px, 1.1fr);
     width: min(1180px, 100%);
     min-height: 620px;
+    box-sizing: border-box;
     overflow: hidden;
+
     border: 1px solid rgba(255, 255, 255, 0.18);
     border-radius: 24px;
     background: rgba(255, 255, 255, 0.08);
