@@ -2307,7 +2307,8 @@ body {
 .auth-body {
     position: relative;
     isolation: isolate;
-    overflow: hidden;
+    overflow-y: auto;
+overflow-x: hidden;
     padding: 32px;
     background:
         radial-gradient(circle at 12% 18%, rgba(56, 189, 248, 0.22), transparent 30%),
@@ -2324,7 +2325,7 @@ body {
     max-width: none;
     min-height: 650px;
     padding: 0;
-    overflow: hidden;
+   overflow: visible;
     border: 1px solid rgba(255, 255, 255, 0.22);
     border-radius: 24px;
     background: rgba(255, 255, 255, 0.94);
