@@ -11,9 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const existingLinks = new Set(Array.from(navigation.querySelectorAll('a')).map((link) => link.textContent.trim()));
         const additionalLinks = [
-            ['Dashboard', '/pages/user-dashboard.html'],
-            ['Live Buses', '/pages/buses.html'],
-            ['Predictions', '/pages/predictions.html']
+            ['Dashboard', 'user-dashboard.html'],
+            ['Live Buses', 'buses.html'],
+            ['Predictions', 'predictions.html']
         ];
         additionalLinks.forEach(([label, href]) => {
             if (existingLinks.has(label)) return;
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 if (response.ok) {
-                    window.location.href = '/pages/user-dashboard.html';
+                    window.location.href = 'home.html';
                     return;
                 }
 
@@ -208,9 +208,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     method: 'POST',
                     credentials: 'include'
                 });
-                window.location.href = '/login.html';
+                window.location.href = 'login.html';
             } catch (error) {
-                window.location.href = '/login.html';
+                window.location.href = 'login.html';
             }
         });
     }
@@ -318,7 +318,7 @@ async function fetchCurrentUser(dashboardUser, dashboardRole) {
         });
 
         if (!response.ok) {
-            window.location.href = '/login.html';
+            window.location.href = 'login.html';
             return;
         }
 
